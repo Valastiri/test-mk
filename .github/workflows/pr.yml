@@ -22,9 +22,7 @@ jobs:
           python-version: 3.x
       - name: Build Mkdocs
         run: pip install mkdocs-material
-      - run: |
-          cd /pr-site
-          mkdocs build --clean
+      - run: mkdocs build --clean --no-directory-urls
       - name: Upload Artifact
         uses: actions/upload-artifact@v2.2.2
         with:
