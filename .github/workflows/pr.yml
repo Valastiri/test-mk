@@ -1,0 +1,30 @@
+# This is a basic workflow to help you get started with Actions
+
+name: PR
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+      - name: Python Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Build Mkdocs
+        run: pip install mkdocs-material
+      - run: mkdocs build --clean
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: Site Demo
+          
