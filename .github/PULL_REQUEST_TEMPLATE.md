@@ -11,7 +11,7 @@
 Discord username (if different from GitHub):
 
 <!-- DO NOT DELETE THIS -->
-## How to download the PR for QA
+## How to download the PR for QA/Preview
 
 Every new commit to this PR will cause a new `Site Demo` artifact to be created and uploaded.
 The build script will create a zip file with a working local copy of the site. Extract the file, and open index.html in the main directory to preview and browse. 
