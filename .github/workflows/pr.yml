@@ -23,12 +23,11 @@ jobs:
       - name: Build Mkdocs
         run: pip install mkdocs-material
       - run: |
-          mkdir tmp_site
-          cd /tmp_site
+          cd /pr-site
           mkdocs build --clean
       - name: Upload Artifact
         uses: actions/upload-artifact@v2.2.2
         with:
           name: Site Demo
-          path: /tmp_site
+          path: /pr-site
           
