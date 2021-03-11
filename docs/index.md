@@ -1,5 +1,5 @@
-# Documentation Placeholder
+# BNN Documentation Placeholder
 
-Built with MkDocs
+*Built with MkDocs*
 
 Please standby for content. 
