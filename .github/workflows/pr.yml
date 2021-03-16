@@ -9,7 +9,7 @@ on:
 jobs:
   ondemand: 
     runs-on: ubuntu-latest
-    if: github.event.label.name == 'build artifact'
+    if: github.event.label.name == 'Build Artifact'
     steps:
       - name: Checkout Source
         uses: actions/checkout@v2
