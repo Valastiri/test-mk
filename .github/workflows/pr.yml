@@ -1,18 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: PR
+name: PR Reviewed
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+  issue_comment:
+    types: [created, edited]
       
 jobs:
-  build: 
+  ondemand: 
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    if: github.event.comment.body == "Ok to test"
     steps:
       - name: Checkout Source
         uses: actions/checkout@v2
