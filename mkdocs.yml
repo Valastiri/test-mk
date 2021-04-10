@@ -4,3 +4,7 @@ site_url: https://docs.bnndesigns.com
 theme:
   name: material
   favicon: assets/images/BNN-Favicon.png
+
+  pallete:
+    scheme: slate
+  favicon: /assets/BNN-favicon.png
