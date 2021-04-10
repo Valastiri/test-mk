@@ -1,0 +1,3 @@
+[submodule "docs/assets/bnn-pdf"]
+	path = docs/assets/bnn-pdf
+	url = https://github.com/Valastiri/bnn-pdf.git
