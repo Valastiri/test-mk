@@ -11,8 +11,8 @@ theme:
   pallete:
     scheme: slate
   favicon: /assets/BNN-favicon.png
-  features:
-    - navigtation.tabs
+  feature:
+    - navigation.tabs
 
 markdown_extensions:
   - attr_list
