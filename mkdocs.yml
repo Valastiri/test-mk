@@ -19,7 +19,7 @@ plugins:
   - search
   - redirects:
       redirect_maps:
-        'divi/redirect-test.md': 'new-divi/redirect-test'
+        'divi/redirect-test.md': 'new-divi/redirect-test.md'
 
 markdown_extensions:
   - attr_list
