@@ -4,7 +4,7 @@ site_url: https://docs.bnndesigns.com
 nav:
   - Home: index.md
   - Divi:
-      - Redirect Test: divi/redirect-test.md
+      - Redirect Test: new-divi/redirect-test.md
 
 theme:
   name: material
@@ -14,6 +14,12 @@ theme:
   features:
     - navigation.tabs
     - navigation.top
+
+plugins:
+  - search
+  - redirects:
+      redirect_maps:
+        'divi/redirect-test.md': 'new-divi/redirect-test'
 
 markdown_extensions:
   - attr_list
