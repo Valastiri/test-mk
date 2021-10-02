@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install weasyprint
-      - run: pip install mkdocs-material mkdocs-redirects
+      - run: pip install mkdocs-material mkdocs-redirects mkdocs-with-pdf
       - run: mkdocs build --config-file pdf.yml
       - name: Create zip
         uses: papeloto/action-zip@v1
