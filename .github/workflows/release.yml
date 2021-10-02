@@ -1,0 +1,31 @@
+name: Create PDF Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create_pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: setup environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: apt install python3-pip python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
+      - run: pip install mkdocs-material mkdocs-redirects
+      - run: mkdocs build --config-file release.yml
+      - name: Create zip
+        uses: papeloto/action-zip@v1
+        with:
+          files: site/pdf document.pdf
+          dest: FlyByWire-Guides.zip
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ github.workspace }}/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: Valastiri/tesk-mk
