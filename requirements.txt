@@ -1,2 +1,2 @@
-mkdocs-material
+mkdocs-material==7.3.4
 mkdocs-redirects
