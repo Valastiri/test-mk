@@ -3,3 +3,6 @@ divi tests:
 
 divi new:
   - docs/new-divi/**/*
+
+main:
+  - '*'
