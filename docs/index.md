@@ -5,3 +5,4 @@
 Please standby for content. We are developing documentation!
 
 Another random test.
+![breaking image](bereakingimage.png)
