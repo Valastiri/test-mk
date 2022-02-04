@@ -25,9 +25,30 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ steps.sha.outputs.result }}
-      - name: make build
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: 3.x
       - run: pip install -r requirements.txt
       - run: mkdocs build -s
+      - name: Message success
+        if: ${{ success() }}
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Deployment succeeded! ✅',
+            });
+      - name: Message failure
+        if: ${{ failure() }}
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Deployment failed! ❌',
+            });
