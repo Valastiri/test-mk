@@ -16,7 +16,7 @@ jobs:
           result-encoding: string
           script: |
             const { owner, repo, number } = context.issue;
-            const pr = await github.pulls.get({
+            const pr = await github.rest.pulls.get({
               owner,
               repo,
               pull_number: number,
@@ -35,7 +35,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -46,7 +46,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
