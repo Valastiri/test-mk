@@ -33,13 +33,15 @@ jobs:
               pull_number: number,
             });
             return pr.data.head.sha
-      - uses: actions/checkout@v2
+      - name: Test Build
+        uses: actions/checkout@v2
         with:
           ref: ${{ steps.sha.outputs.result }}
       - uses: actions/setup-python@v2
         with:
           python-version: 3.x
-      - run: pip install -r requirements.txt
+      - name: Create Build
+        run: pip install -r requirements.txt
       - run: mkdocs build -s
       - name: Message success
         if: ${{ success() }}
