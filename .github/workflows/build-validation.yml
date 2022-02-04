@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.event.issue.pull_request && github.event.comment.body == 'check build'}}
     steps:
       - name: React to comment
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         with:
           script: |
             const {owner, repo} = context.issue;
