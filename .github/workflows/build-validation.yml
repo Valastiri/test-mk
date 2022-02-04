@@ -41,8 +41,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
-        run: pip install -r requirements.txt
-      - run: mkdocs build -s
+        run: |
+          pip install -r requirements.txt
+          mkdocs build -s
       - name: Message success
         if: ${{ success() }}
         uses: actions/github-script@v5
