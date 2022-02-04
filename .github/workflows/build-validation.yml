@@ -23,6 +23,9 @@ jobs:
               comment_id: context.payload.comment.id,
               content: "rocket",
             });
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{github.event.pull_request.head.ref}}
