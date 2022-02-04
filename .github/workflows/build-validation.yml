@@ -34,13 +34,13 @@ jobs:
               pull_number: number,
             });
             return pr.data.head.sha
+      - name: Create Build
       - uses: actions/checkout@v2
         with:
           ref: ${{ steps.sha.outputs.result }}
       - uses: actions/setup-python@v2
         with:
           python-version: 3.x
-      - name: Create Build
         run: pip install -r requirements.txt
       - run: mkdocs build -s
       - name: Message success
