@@ -35,7 +35,7 @@ jobs:
               pull_number: number,
             });
             return pr.data.head.sha
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: ${{ steps.sha.outputs.result }}
       - name: Create Build
