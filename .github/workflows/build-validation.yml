@@ -22,11 +22,11 @@ jobs:
               pull_number: number,
             });
             return pr.data.head.sha
-      - name: Build Check
       - uses: actions/checkout@v2
         with:
           ref: ${{ steps.sha.outputs.result }}
-      - uses: actions/setup-python@v2
+      - name: make build
+        uses: actions/setup-python@v2
         with:
           python-version: 3.x
       - run: pip install -r requirements.txt
