@@ -41,7 +41,6 @@ jobs:
         with:
           ref: ${{ steps.sha.outputs.result }}
           fetch-depth: 0
-      - run: git checkout HEAD^
       - name: Make Build
         uses: actions/setup-python@v2
         with:
