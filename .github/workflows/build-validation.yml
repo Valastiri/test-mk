@@ -7,7 +7,8 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == 'check build'}}
+    # Check if PR, prevent running on forksm and trigger comment
+    if: ${{ github.event.issue.pull_request && github.repository_owner == 'flybywiresim' && github.event.comment.body == 'check build'}}
     steps:
       - name: React to comment
         uses: actions/github-script@v5
