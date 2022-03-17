@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: 3.x
       - run: |
-          pip install - requirements.txt
+          pip install -r pdf-packages.txt
           mkdocs build
       - name: Create zip
         uses: papeloto/action-zip@v1
