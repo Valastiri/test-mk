@@ -1,0 +1,8 @@
+divi tests:
+  - docs/divi/**/*
+
+divi new:
+  - docs/new-divi/**/*
+
+main:
+  - '*'

@@ -1,0 +1,29 @@
+site_name: My Docs
+site_url: https://docs.bnndesigns.com
+
+nav:
+  - Home: index.md
+  - Divi:
+      - Redirect Test: new-divi/redirect-test.md
+
+theme:
+  name: material
+  font:
+    test: Inter
+  pallete:
+    scheme: slate
+  favicon: /assets/BNN-favicon.png
+  features:
+    - navigation.tabs
+    - navigation.top
+
+plugins:
+  - search
+  - with-pdf:
+      debug_html: true
+  - redirects:
+      redirect_maps:
+        'divi/redirect-test.md': 'new-divi/redirect-test.md'
+
+markdown_extensions:
+  - attr_list

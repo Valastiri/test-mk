@@ -1,0 +1,27 @@
+name: Artifact Requested
+
+on:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  ondemand:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'Build Artifact'
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+      - name: Python Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Build Mkdocs
+        run: pip install -r requirements.txt
+      - run: mkdocs build --no-directory-urls
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: Site Demo
+          path: ${{ github.workspace }}/site
+

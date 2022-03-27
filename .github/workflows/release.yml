@@ -1,0 +1,31 @@
+name: Create PDF Release
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  create_pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: setup environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: |
+          pip install -r pdf-packages.txt
+          mkdocs build
+      - name: Create zip
+        uses: papeloto/action-zip@v1
+        with:
+          files: site/pdf
+          dest: FlyByWire-Guides.zip
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: FlyByWire Guides
+          files: ${{ github.workspace }}/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: Valastiri/tesk-mk
