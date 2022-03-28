@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: Testing Mkdocs Material
 site_url: https://docs.bnndesigns.com
 
 theme:
@@ -12,9 +12,6 @@ theme:
 
 plugins:
   - search
-  - redirects:
-      redirect_maps:
-        'divi/redirect-test.md': 'new-divi/sample-s2.md'
 
 markdown_extensions:
   - attr_list
