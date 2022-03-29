@@ -12,6 +12,13 @@ theme:
 
 plugins:
   - search
+  - awesome-pages
+  - multirepo:
+      cleanup: true
+      repos:
+        - section: Offsite
+          import_url: 'https://github.com/Valastiri/submodule-testing?branch=main'
+          edit_uri: /blob/main/
 
 markdown_extensions:
   - attr_list
