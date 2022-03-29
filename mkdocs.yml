@@ -10,15 +10,21 @@ theme:
     - navigation.tabs
     - navigation.top
 
+nav:
+  - Home: index.md
+  - Offsite: '!import https://github.com/Valastiri/submodule-testing?branch=main'
+  - ...
+
 plugins:
   - search
   - awesome-pages
   - multirepo:
-      cleanup: true
-      repos:
-        - section: Offsite
-          import_url: 'https://github.com/Valastiri/submodule-testing?branch=main'
-          edit_uri: /blob/main/
+      imported_repo: true
+      url: https://github.com/Valastiri/submodule-testing
+      section_name: Offsite
+      dirs: ["mkdocs.yml", "docs/*"]
+      yml_file: mkdocs.yml
+      branch: main
 
 markdown_extensions:
   - attr_list

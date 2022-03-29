@@ -1,5 +1,0 @@
-nav:
-  - Home: index.md
-  - Submodule: '!import 'https://github.com/Valastiri/submodule-testing?branch=main'
-  - section-1
-  - section-2
