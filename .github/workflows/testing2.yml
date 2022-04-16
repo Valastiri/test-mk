@@ -7,7 +7,6 @@ on:
 
 jobs:
   localization-update:
-    if: github.repository_owner == 'flybywiresim'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Branch
@@ -19,7 +18,7 @@ jobs:
           ./scripts/dev-env/run.sh ./scripts/setup.sh
           npm run build:efb-translation
       - name: Create PR
-        uses: gr2m/create-or-update-pull-request-action@v1  # Generate a PR or updates an existing PR
+      - uses: gr2m/create-or-update-pull-request-action@v1  # Generate a PR or updates an existing PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
