@@ -2,11 +2,10 @@ name: FlyPad Localazy Download Testing
 on:
   schedule:
     # https://crontab.guru/#0_0_*_*_1
-    - cron: 5 * * * *
-  workflow_dispatch:
+    - cron: '*/5 * * * *'
 
 jobs:
-  localization-update:
+  auto-PR:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,9 +17,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          path: src/instruments/src/EFB/Localization
           branch: flypadosv3 # Specify branch that this action uses.
           title: 'build: auto changes'
           body: >
-            This PR automatically downloads and updates the approved changes from Localazy translations for the flyPadOS3.
+            This is a test action.
           commit-message: 'build: auto changes'
