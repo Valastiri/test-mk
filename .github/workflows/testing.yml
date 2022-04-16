@@ -3,6 +3,7 @@ on:
   schedule:
     # https://crontab.guru/#0_0_*_*_1
     - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
   auto-PR:
