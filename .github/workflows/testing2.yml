@@ -1,4 +1,4 @@
-name: FlyPad Localazy Download Testing
+name: Testing 2
 on:
   schedule:
     # https://crontab.guru/#0_0_*_*_1
