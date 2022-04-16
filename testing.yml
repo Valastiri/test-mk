@@ -2,8 +2,7 @@ name: FlyPad Localazy Download Testing
 on:
   schedule:
     # https://crontab.guru/#0_0_*_*_1
-    - cron: 5 * * * *
-  workflow_dispatch:
+    - cron: '*/5 * * * *'
 
 jobs:
   localization-update:
