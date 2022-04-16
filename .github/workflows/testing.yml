@@ -11,8 +11,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - run: |
-          pip install -r requirements.txt
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: "date > datetime.txt"
       - uses: gr2m/create-or-update-pull-request-action@v1  # Generate a PR or updates an existing PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
