@@ -13,7 +13,6 @@ theme:
 extra:
   version:
     provider: mike
-    default: Development
 
 plugins:
   - search
