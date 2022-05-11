@@ -35,11 +35,11 @@ jobs:
         if: github.ref == 'refs/heads/master'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          publish_dir: ./test-mk/site
           destination_dir: ./
           keep_files: true
           allow_empty_commit: true
-          full_commit_message: Deployed ${{ env.SHORT_SHA }} to . with MkDocs ${{ env.MKDOCS_VERSION }}
+          full_commit_message: Deployed ${{ env.SHORT_SHA }} with MkDocs ${{ env.MKDOCS_VERSION }}
 
       - name: fetch gh-pages
         run: |
