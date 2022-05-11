@@ -1,5 +1,5 @@
 site_name: Testing Mkdocs Material
-site_url: https://docs.bnndesigns.com
+site_url: https://docs.bnndesigns.com/
 
 theme:
   name: material
@@ -19,7 +19,7 @@ plugins:
   - search
   - redirects:
       redirect_maps:
-        '../redirectme.md': 'section-1/test-r.md'
+        'redirectme.md': 'section-1/test-r.md'
 
 markdown_extensions:
   - attr_list
