@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Primary
-      - uses: actions/checkout@v2
-      - name: mike deployment requirement
+        uses: actions/checkout@v2
       - run: |
           git fetch origin gh-pages --depth=1
           git config user.name github-actions
@@ -27,10 +26,9 @@ jobs:
       - name: Create Dev versioning
       - run: mike deploy --push Development
       - name: Checkout Stable
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         with:
           ref: stable
-      - name: fetch gh-pages status
       - run: |
           git fetch origin gh-pages --depth=1
           git config user.name github-actions
