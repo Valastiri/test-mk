@@ -10,31 +10,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Primary
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: mike deployment requirement
       - run: |
           git fetch origin gh-pages --depth=1
           git config user.name github-actions
           git config user.email github-actions@github.com
       - name: Setup Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: 3.x
       - name: Deploy basic mkdocs
-        run: |
+      - run: |
           pip install -r requirements.txt
           mkdocs gh-deploy
       - name: Create Dev versioning
-        run: mike deploy --push Development
+      - run: mike deploy --push Development
       - name: Checkout Stable
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: stable
       - name: fetch gh-pages status
-        run: |
+      - run: |
           git fetch origin gh-pages --depth=1
           git config user.name github-actions
           git config user.email github-actions@github.com
       - name: Create Stable versioning
-        run: mike deploy --push Stable
+      - run: mike deploy --push Stable
 
