@@ -47,7 +47,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
       - name: Create Dev versioning
-        run: |
-          mike deploy --push Development
-          mike set-default --push Development
+        run: mike deploy --push Development
+      - run: mike set-default --push Development
 
