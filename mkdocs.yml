@@ -19,7 +19,7 @@ plugins:
   - search
   - redirects:
       redirect_maps:
-        'redirectme.md': 'section-1/test-r.md'
+        '../redirectme.md': 'section-1/test-r.md'
 
 markdown_extensions:
   - attr_list
