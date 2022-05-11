@@ -22,20 +22,21 @@ jobs:
       - name: Dependencies and mkdocs build
         run: |
           pip install -r requirements.txt
-          mkdocs -v build
+          mkdocs build
 
-      - name: Set up environment variables
+      - name: Github ENV
         if: github.ref == 'refs/heads/master'
         run: |
           echo "MKDOCS_VERSION=$(mkdocs --version | cut -d " " -f 3)" >> $GITHUB_ENV
           echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-6`" >> $GITHUB_ENV
 
-      - name: Deploy mkdocs
+      - name: Deploy updated build
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/master'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
+          destination_dir: ./
           keep_files: true
           allow_empty_commit: true
           full_commit_message: Deployed ${{ env.SHORT_SHA }} with MkDocs ${{ env.MKDOCS_VERSION }}
