@@ -35,7 +35,7 @@ jobs:
           body: |
             Please add changelog entry. ❌
       - name: Update comment
-        if: steps.fc.outputs.comment-id != ''
+        if: ${{ steps.fc.outputs.comment-id != '' && success() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
