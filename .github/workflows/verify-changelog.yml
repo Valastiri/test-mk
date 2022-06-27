@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: Verify Changelog
         uses: tj-actions/verify-changed-files@v10
         id: verify-changelog
