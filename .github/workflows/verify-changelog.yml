@@ -1,0 +1,38 @@
+name: Verify Changelog
+
+on:
+  pull_request_target:
+    types: [opened, ready_for_review]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Verify Changelog
+        uses: tj-actions/verify-changed-files@v10
+        id: verify-changelog
+        with:
+          files: |
+            .github/CHANGELOG.md
+      - name: Verify changes to CHANGELOG.md
+        if: steps.verify-changelog.outputs.files_changed != 'true'
+        run: |
+          echo "No Changes found. Please add changelog entry."
+          exit 1
+      - name: Show changes to CHANGELOG.md
+        if: steps.verify-changelog.outputs.files_changed == 'true'
+        run: |
+          echo "Changelog Verified: ${{ steps.verify-changelog.outputs.changed_files }}"
+      - name: Message failure
+        if: ${{ failure() }}
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'No Changes found. Please add changelog entry. ❌',
+            });
