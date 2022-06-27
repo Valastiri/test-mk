@@ -15,7 +15,7 @@ jobs:
         id: verify-changelog
         with:
           files: |
-            .github/CHANGELOG.md
+            **/CHANGELOG.md
       - name: Verify changes to CHANGELOG.md
         if: steps.verify-changelog.outputs.files_changed != 'true'
         run: |
