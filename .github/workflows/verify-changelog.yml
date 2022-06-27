@@ -17,6 +17,7 @@ jobs:
         with:
           fileName: CHANGELOG.md
           checkNotification: Simple
+          noChangelogLabel: skip changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Message failure
