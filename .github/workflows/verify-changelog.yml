@@ -2,7 +2,7 @@ name: Verify Changelog
 
 on:
   pull_request_target:
-    types: [opened, ready_for_review, synchronize]
+    types: [opened, ready_for_review, synchronize, labeled]
 
 jobs:
   verify:
@@ -20,14 +20,25 @@ jobs:
           noChangelogLabel: skip changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Message failure
-        if: ${{ failure() }}
-        uses: actions/github-script@v5
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
         with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Please add changelog entry. ❌',
-            });
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Please add changelog entry. ❌
+      - name: Create comment
+        if: ${{ steps.fc.outputs.comment-id == '' && failure() }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Please add changelog entry. ❌
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            Thank you. Changelog Verified!
+          reactions: rocket
