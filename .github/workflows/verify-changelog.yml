@@ -17,8 +17,7 @@ jobs:
         id: verify-changelog
         with:
           files: |
-            **/CHANGELOG.md
-          working_directory: ./
+            CHANGELOG.md
       - name: Run if succesful check of changes to CHANGELOG.md
         if: steps.verify-changelog.outputs.any_changed == 'true'
         run: |
