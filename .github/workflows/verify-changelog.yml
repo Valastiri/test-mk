@@ -17,16 +17,16 @@ jobs:
         id: verify-changelog
         with:
           files: |
-            .github/CHANGELOG.md
+            **/CHANGELOG.md
+      - name: Run if succesful check of changes to CHANGELOG.md
+        if: steps.verify-changelog.outputs.any_changed == 'true'
+        run: |
+          echo "Changelog Verified: ${{ steps.verify-changelog.outputs.only_changed }}"
       - name: Run if CHANGELOG.md has not been updated
-        if: steps.verify-changelog.outputs.only_changed != 'true'
+        if: steps.verify-changelog.outputs.any_changed != 'true'
         run: |
           echo "No Changes found. Please add changelog entry."
           exit 1
-      - name: Run if succesful check of changes to CHANGELOG.md
-        if: steps.verify-changelog.outputs.only_changed == 'true'
-        run: |
-          echo "Changelog Verified: ${{ steps.verify-changelog.outputs.only_changed }}"
       - name: Message failure
         if: ${{ failure() }}
         uses: actions/github-script@v5
