@@ -3,6 +3,7 @@ name: Verify Changelog
 on:
   pull_request_target:
     types: [opened, ready_for_review, synchronize, labeled]
+  workflow_dispatch:
 
 jobs:
   verify:
