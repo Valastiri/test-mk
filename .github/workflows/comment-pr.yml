@@ -52,7 +52,7 @@ jobs:
         if: ${{ steps.fc.outputs.comment-id == '' && failure() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ steps.pr.outputs.issue_number == '' }}
           body: |
             Please add changelog entry. ❌
       - name: Update comment
