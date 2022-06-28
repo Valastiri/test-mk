@@ -19,7 +19,7 @@ jobs:
           checkNotification: Simple
           noChangelogLabel: skip changelog
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}x
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Save PR number
         if: always ()
         run: |
