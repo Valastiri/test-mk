@@ -40,19 +40,21 @@ jobs:
             var fs = require('fs');
             var issue_number = Number(fs.readFileSync('./NR'));
           github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "::set-output name=issue_number::$issue_number"
       - name: Find Comment
         if: success () || failure ()
         uses: peter-evans/find-comment@v2
         id: fc
         with:
-          issue-number: ${{ steps.pr.outputs.issue_number == '$issue_number' }}
+          issue-number: ${{ steps.pr.outputs.issue_number }}
           comment-author: 'github-actions[bot]'
           body-includes: Please add changelog entry. ❌
       - name: Create comment
         if: ${{ steps.fc.outputs.comment-id == '' && failure() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
-          issue-number: ${{ steps.pr.outputs.issue_number == '$issue_number' }}
+          issue-number: ${{ steps.pr.outputs.issue_number }}
           body: |
             Please add changelog entry. ❌
       - name: Update comment
