@@ -40,7 +40,7 @@ jobs:
             var fs = require('fs');
             var issue_number = Number(fs.readFileSync('./NR'));
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+      - run: |
           echo "::set-output name=issue_number::$issue_number"
       - name: Find Comment
         if: success () || failure ()
