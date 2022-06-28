@@ -39,6 +39,7 @@ jobs:
           script: |
             var fs = require('fs');
             var issue_number = Number(fs.readFileSync('./NR'));
+            console.log(issue_number);
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Find Comment
         if: success () || failure ()
