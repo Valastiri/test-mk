@@ -33,12 +33,20 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
       - run: unzip pr.zip
+    - name: 'Comment on PR'
+      uses: actions/github-script@v3
+      id: pr
+      with:
+        script: |
+          var fs = require('fs');
+          var issue_number = Number(fs.readFileSync('./NR'));
+        github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Find Comment
         if: success () || failure ()
         uses: peter-evans/find-comment@v2
         id: fc
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ steps.pr.outputs.issue_number == '' }}
           comment-author: 'github-actions[bot]'
           body-includes: Please add changelog entry. ❌
       - name: Create comment
