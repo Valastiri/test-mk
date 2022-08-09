@@ -1,42 +1,22 @@
-name: Check Changelog
+name: Verify Changelog
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - labeled
+      - unlabeled
 
 jobs:
-  validate:
+  verify:
     runs-on: ubuntu-latest
-    # Check if PR, prevent running on forks and trigger comment
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == 'check changelog' }}
     steps:
-      - name: React to comment
-        uses: actions/github-script@v5
+      - name: checkout
+        uses: actions/checkout@v3
         with:
-          script: |
-            const {owner, repo} = context.issue;
-            github.rest.reactions.createForIssueComment({
-              owner,
-              repo,
-              comment_id: context.payload.comment.id,
-              content: "rocket",
-            });
-      - name: Get PR SHA
-        id: sha
-        uses: actions/github-script@v5
-        with:
-          result-encoding: string
-          script: |
-            const { owner, repo, number } = context.issue;
-            const pr = await github.rest.pulls.get({
-              owner,
-              repo,
-              pull_number: number,
-            });
-            return pr.data.head.sha
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.sha.outputs.result }}
           fetch-depth: 0
       - name: Verify changelog
         uses: Zomzog/changelog-checker@v1.2.0
@@ -46,25 +26,3 @@ jobs:
           noChangelogLabel: skip changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Message success
-        if: ${{ success() }}
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Strict Build Validated! ✅',
-            });
-      - name: Message failure
-        if: ${{ failure() }}
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Strict Build Failed! ❌',
-            });
