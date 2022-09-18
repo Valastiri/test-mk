@@ -19,6 +19,12 @@ jobs:
         with:
           python-version: 3.x
 
+      - name: Cache Social Cards
+        uses: actions/cache@v2
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+
       - name: Dependencies and mkdocs build
         run: |
           pip install -r requirements.txt
