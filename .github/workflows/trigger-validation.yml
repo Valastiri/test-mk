@@ -1,4 +1,4 @@
-name: Build Validation
+name: Manual Build Validation
 
 on:
   issue_comment:
@@ -10,11 +10,28 @@ jobs:
     # Check if PR, prevent running on forks and trigger comment
     if: ${{ github.event.issue.pull_request && github.event.comment.body == 'check build' }}
     steps:
+      - name: Get commenter's permissions
+        uses: actions/github-script@v6
+        id: commenter_perms
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { sender } = context.payload.comment;
+            const perms = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner,
+              repo,
+              username: sender.login
+            });
+            return perms.data.permission;
+      - name: Validate commenter's permissions
+        run: |
+          if [ "${{ steps.commenter_perms.outputs.result }}" != "admin" ] && [ "${{ steps.commenter_perms.outputs.result }}" != "write" ]; then exit 1; fi
+        shell: bash
       - name: React to comment
         uses: actions/github-script@v6
         with:
           script: |
-            const {owner, repo} = context.issue;
+            const { owner, repo } = context.repo;
             github.rest.reactions.createForIssueComment({
               owner,
               repo,
@@ -34,7 +51,7 @@ jobs:
               pull_number: number,
             });
             return pr.data.head.sha
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
           ref: ${{ steps.sha.outputs.result }}
           fetch-depth: 0
@@ -65,5 +82,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Strict Build Failed! ❌',
+              body: 'Strict Build Failed! ❌ - Please checkout this PR locally to fix the issue before merging or visit the actions tab.',
             });
