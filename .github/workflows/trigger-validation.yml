@@ -10,23 +10,24 @@ jobs:
     # Check if PR, prevent running on forks and trigger comment
     if: ${{ github.event.issue.pull_request && github.event.comment.body == 'check build' }}
     steps:
-      - name: Get commenter's permissions
-        uses: actions/github-script@v6
-        id: commenter_perms
+      - name: Check if user is maintainer or organization member
+        id: check-permissions
+        uses: actions/github-script@v5
         with:
+          result-encoding: string
           script: |
-            const { owner, repo } = context.repo;
-            const { sender } = context.payload.comment;
-            const perms = await github.rest.repos.getCollaboratorPermissionLevel({
-              owner,
-              repo,
-              username: sender.login
+            const { owner } = context.repo;
+            const { data: isOrgMember } = await github.rest.orgs.checkMembershipForUser({
+              org: owner,
+              username: context.payload.comment.user.login,
             });
-            return perms.data.permission;
-      - name: Validate commenter's permissions
-        run: |
-          if [ "${{ steps.commenter_perms.outputs.result }}" != "admin" ] && [ "${{ steps.commenter_perms.outputs.result }}" != "write" ]; then exit 1; fi
-        shell: bash
+            const { data: permissionLevel } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: owner,
+              repo: context.repo.repo,
+              username: context.payload.comment.user.login,
+            });
+            const isMaintainer = permissionLevel.permission === 'admin' || permissionLevel.permission === 'write' || permissionLevel.permission === 'maintain';
+            return isOrgMember === true || isMaintainer === true;
       - name: React to comment
         uses: actions/github-script@v6
         with:
