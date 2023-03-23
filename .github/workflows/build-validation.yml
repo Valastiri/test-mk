@@ -16,9 +16,9 @@ jobs:
 
   auto_merge:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     steps:
       - name: Remove Label
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Needs Review
