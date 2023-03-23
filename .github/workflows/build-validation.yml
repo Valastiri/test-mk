@@ -22,7 +22,7 @@ jobs:
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Needs Review
-        continue-on-error: true
+        continue-on-error: false
         id: remove-label
 
       - name: Check Remove Label Exit Code
