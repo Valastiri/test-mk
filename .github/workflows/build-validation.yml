@@ -16,7 +16,6 @@ jobs:
 
   merge_prevention:
     runs-on: ubuntu-latest
-    needs: label_pr
     steps:
       - name: Prevent Merge
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
