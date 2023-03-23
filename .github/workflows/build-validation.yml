@@ -24,7 +24,11 @@ jobs:
           labels: Needs Review
         id: remove-label
 
-      - name: Check Remove Label Exit Code
+      - name: Remove Label Failed
+        if: ${{ steps.remove-label.outcome == 'failure' }}
+        run: echo "Remove Label step failed" && exit 1
+
+      - name: Remove Label Succeeded
         if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
         run: echo "Remove Label step succeeded and returned code 0"
 
