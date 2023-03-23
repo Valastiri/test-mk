@@ -16,9 +16,6 @@ jobs:
 
   review_required:
     runs-on: ubuntu-latest
-    env:
-      RUN_REMOVE_LABEL: ${{ steps.check_labels.outputs.run_remove_label }}
-      PREVENT_MERGE: ${{ steps.check_labels.outputs.prevent_merge }}
     steps:
       - name: Check for Auto Merge or Needs Review
         id: check_labels
@@ -27,13 +24,13 @@ jobs:
           if [ "$(echo ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }})" == "true" ]; then
             echo "Both labels present"
             # code to be executed if both 'Auto Merge' and 'Needs Review' labels are present
-            echo "::set-env name=RUN_REMOVE_LABEL::true"
-            echo "::set-env name=PREVENT_MERGE::false"
+            echo "RUN_REMOVE_LABEL=true" >> $GITHUB_ENV
+            echo "PREVENT_MERGE=false" >> $GITHUB_ENV
           else
             echo "Only one label is present"
             # code to be executed if only one of the labels is present
-            echo "::set-env name=RUN_REMOVE_LABEL::false"
-            echo "::set-env name=PREVENT_MERGE::${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}"
+            echo "RUN_REMOVE_LABEL=false" >> $GITHUB_ENV
+            echo "PREVENT_MERGE=${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}" >> $GITHUB_ENV
           fi
 
       - name: Remove Label
