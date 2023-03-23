@@ -2,7 +2,7 @@ name: Build Validation
 
 on:
   pull_request_target:
-    types: [labeled, unlabeled, synchronize]
+    types: [opened, ready_for_review, synchronize]
 
 jobs:
   validate:
