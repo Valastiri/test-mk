@@ -17,10 +17,6 @@ jobs:
   merge_prevention:
     runs-on: ubuntu-latest
     steps:
-      - name: Prevent Merge
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
-        run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
-
       - name: Remove Label
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
         uses: actions-ecosystem/action-remove-labels@v1
@@ -28,6 +24,10 @@ jobs:
           labels: Needs Review
         continue-on-error: true
         id: remove-label
+
+      - name: Prevent Merge
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+        run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
 
       - name: Check Remove Label Exit Code
         if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
