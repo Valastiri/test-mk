@@ -18,11 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Remove Label
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
         uses: actions-ecosystem/action-remove-labels@v1
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
         with:
           labels: Needs Review
-        continue-on-error: true
+        continue-on-error: false
         id: remove-label
 
       - name: Check Remove Label Exit Code
