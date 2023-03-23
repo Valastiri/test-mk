@@ -22,7 +22,7 @@ jobs:
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Needs Review
-        continue-on-error: false
+        continue-on-error: true
         id: remove-label
 
       - name: Check Remove Label Exit Code
@@ -31,6 +31,7 @@ jobs:
 
   review_required:
     runs-on: ubuntu-latest
+    needs: auto_merge
     steps:
       - name: Prevent Merge
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
