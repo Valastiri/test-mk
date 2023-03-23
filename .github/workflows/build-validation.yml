@@ -16,23 +16,28 @@ jobs:
 
   review_required:
     runs-on: ubuntu-latest
+    outputs:
+      run_remove_label: ${{ steps.check_labels.outputs.run_remove_label }}
+      prevent_merge: ${{ steps.check_labels.outputs.prevent_merge }}
     steps:
       - name: Check for Auto Merge or Needs Review
+        id: check_labels
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') || contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         run: |
           if [ "$(echo ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }})" == "true" ]; then
             echo "Both labels present"
             # code to be executed if both 'Auto Merge' and 'Needs Review' labels are present
-            export run_remove_label=true
-            export prevent_merge=false
+            echo "::set-output name=run_remove_label::true"
+            echo "::set-output name=prevent_merge::false"
           else
             echo "Only one label is present"
             # code to be executed if only one of the labels is present
-            export run_remove_label=false
-            export prevent_merge=${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+            echo "::set-output name=run_remove_label::false"
+            echo "::set-output name=prevent_merge::${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}"
           fi
+
       - name: Remove Label
-        if: ${{ env.run_remove_label == 'true' }}
+        if: ${{ steps.check_labels.outputs.run_remove_label == 'true' }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Needs Review
@@ -47,8 +52,9 @@ jobs:
         run: echo "Remove Label step succeeded and returned code 0"
 
       - name: Prevent Merge
-        if: ${{ env.run_remove_label == 'false' && env.prevent_merge == 'true' }}
+        if: ${{ steps.check_labels.outputs.run_remove_label == 'false' && steps.check_labels.outputs.prevent_merge == 'true' }}
         run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
+
 
 
   validate:
