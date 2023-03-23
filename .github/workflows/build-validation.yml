@@ -24,6 +24,7 @@ jobs:
             echo "Both labels present"
             # code to be executed if both 'Auto Merge' and 'Needs Review' labels are present
             export run_remove_label=true
+            export prevent_merge=false
           else
             echo "Only one label is present"
             # code to be executed if only one of the labels is present
