@@ -9,18 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assign Label
-        if: github.event_name == 'pull_request'
+        if: ${{ github.event_name == 'pull_request' }}
         uses: actions-ecosystem/action-add-labels@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           label: 'Needs Review'
 
       - name: Prevent Merge
-        if: contains(github.event.pull_request.labels.*.name, 'Needs Review')
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
 
       - name: Remove Label
-        if: contains(github.event.pull_request.labels.*.name, 'Auto Merge')
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Needs Review
@@ -28,7 +28,7 @@ jobs:
         id: remove-label
 
       - name: Check Remove Label Exit Code
-        if: steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0'
+        if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
         run: echo "Remove Label step succeeded and returned code 0"
 
 
