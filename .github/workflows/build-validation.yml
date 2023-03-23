@@ -5,8 +5,31 @@ on:
     types: [opened, ready_for_review, synchronize, labeled, unlabeled]
 
 jobs:
+  label_and_merge_prevention:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Label
+        if: github.event_name == 'pull_request'
+        uses: actions-ecosystem/action-labeler@v2.2.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          label: 'Needs Review'
+
+      - name: Prevent Merge
+        if: contains(github.event.pull_request.labels.*.name, 'Needs Review')
+        run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
+
+      - name: Remove Label
+        if: contains(github.event.pull_request.labels.*.name, 'Auto Merge')
+        uses: peter-evans/remove-labels@v1.2.0
+        with:
+          labels: |
+            Needs Review
+        run: echo "::set-output name=code::0"
+
   validate:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'run tests') }}
+    needs: label_and_merge_prevention
+    if: ${{ success () && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     runs-on: ubuntu-latest
     steps:
       - name: Get PR SHA
