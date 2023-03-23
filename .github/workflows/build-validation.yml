@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Assign Label
         if: github.event_name == 'pull_request'
-        uses: actions-ecosystem/action-labeler@v2.2.0
+        uses: actions-ecosystem/action-add-labels@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           label: 'Needs Review'
@@ -21,10 +21,9 @@ jobs:
 
       - name: Remove Label
         if: contains(github.event.pull_request.labels.*.name, 'Auto Merge')
-        uses: peter-evans/remove-labels@v1.2.0
+        uses: actions-ecosystem/action-remove-labels@v1
         with:
-          labels: |
-            Needs Review
+          labels: Needs Review
         continue-on-error: true
         id: remove-label
 
