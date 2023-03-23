@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assign Label
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event.issue.pull_request }}
         uses: actions-ecosystem/action-add-labels@v1
         with:
           repo: ${{ github.event.pull_request.number }}
