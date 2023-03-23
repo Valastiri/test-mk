@@ -23,12 +23,12 @@ jobs:
           if [ "$(echo ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }})" == "true" ]; then
             echo "Both labels present"
             # code to be executed if both 'Auto Merge' and 'Needs Review' labels are present
-            run_remove_label: true
+            export run_remove_label=true
           else
             echo "Only one label is present"
             # code to be executed if only one of the labels is present
-            run_remove_label: false
-            prevent_merge: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+            export run_remove_label=false
+            export prevent_merge=${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
           fi
       - name: Remove Label
         if: ${{ env.run_remove_label == 'true' }}
@@ -46,7 +46,7 @@ jobs:
         run: echo "Remove Label step succeeded and returned code 0"
 
       - name: Prevent Merge
-        if: ${{ env.prevent_merge == 'true' }}
+        if: ${{ env.run_remove_label == 'false' && env.prevent_merge == 'true' }}
         run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
 
 
