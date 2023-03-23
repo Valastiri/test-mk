@@ -25,7 +25,13 @@ jobs:
         with:
           labels: |
             Needs Review
-        run: echo "::set-output name=code::0"
+        continue-on-error: true
+        id: remove-label
+
+      - name: Check Remove Label Exit Code
+        if: steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0'
+        run: echo "Remove Label step succeeded and returned code 0"
+
 
   validate:
     needs: label_and_merge_prevention
