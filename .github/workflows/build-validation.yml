@@ -5,14 +5,19 @@ on:
     types: [opened, ready_for_review, synchronize, labeled, unlabeled]
 
 jobs:
-  label_and_merge_prevention:
+  label_pr:
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
     steps:
       - name: Assign Label
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: 'Needs Review'
 
+  merge_prevention:
+    runs-on: ubuntu-latest
+    needs: label_pr
+    steps:
       - name: Prevent Merge
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
@@ -31,7 +36,7 @@ jobs:
 
 
   validate:
-    needs: label_and_merge_prevention
+    needs: merge_prevention
     if: ${{ success () && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     runs-on: ubuntu-latest
     steps:
