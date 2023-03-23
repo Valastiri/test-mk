@@ -12,7 +12,7 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         with:
           repo: ${{ github.event.pull_request.number }}
-          label: 'Needs Review'
+          labels: 'Needs Review'
 
       - name: Prevent Merge
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
