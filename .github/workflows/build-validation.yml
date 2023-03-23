@@ -28,6 +28,7 @@ jobs:
             echo "Only one label is present"
             # code to be executed if only one of the labels is present
             run_remove_label: false
+            prevent_merge: ${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
           fi
       - name: Remove Label
         if: ${{ env.run_remove_label == 'true' }}
@@ -45,8 +46,9 @@ jobs:
         run: echo "Remove Label step succeeded and returned code 0"
 
       - name: Prevent Merge
-        if: ${{ env.run_remove_label == 'false' && contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+        if: ${{ env.prevent_merge == 'true' }}
         run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
+
 
   validate:
     needs: review_required
