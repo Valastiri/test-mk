@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check for Auto Merge or Needs Review
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') || contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+        if: contains(github.event.pull_request.labels.*.name, 'Auto Merge') || contains(github.event.pull_request.labels.*.name, 'Needs Review')
         run:
           shell: bash
           command: |
