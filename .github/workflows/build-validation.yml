@@ -100,7 +100,7 @@ jobs:
 
   failed_validation:
     needs: validate
-    if: ${{ failure() }}
+    if: ${{ failure() && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     runs-on: ubuntu-latest
     steps:
       - name: Remove Label
