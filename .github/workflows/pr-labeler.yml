@@ -12,11 +12,3 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           configuration-path: .github/labeler.yml
           sync-labels: true
-  set-review:
-    runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
-    steps:
-      - name: Assign Label
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: 'Needs Review'
