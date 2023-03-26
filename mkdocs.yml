@@ -8,7 +8,7 @@ theme:
   favicon: /assets/BNN-favicon.png
   features:
     - navigation.tabs
-    - navigation.top
+    - navigation.topa
 
 extra:
   version:
