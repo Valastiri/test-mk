@@ -5,14 +5,18 @@ on:
     types: [ready_for_review, synchronize, labeled, unlabeled]
 
 jobs:
-  review_required:
+  set-review:
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
     steps:
       - name: Assign Label
-        if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: 'Needs Review'
+
+  review_required:
+    runs-on: ubuntu-latest
+    steps:
       - name: Check for Auto Merge or Needs Review
         id: check_labels
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') || contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
