@@ -2,18 +2,9 @@ name: Build Validation
 
 on:
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, labeled, unlabeled]
+    types: [opened, ready_for_review, labeled, unlabeled]
 
 jobs:
-  label_pr:
-    runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
-    steps:
-      - name: Assign Label
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: 'Needs Review'
-
   review_required:
     runs-on: ubuntu-latest
     steps:
