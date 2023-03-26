@@ -94,7 +94,7 @@ jobs:
             });
       - name: Auto merge pr
         if: ${{ success() }}
-        run: gh pr merge --squash --auto --message "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.number }}"
+        run: gh pr merge --squash --auto --subject-text "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.number }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
