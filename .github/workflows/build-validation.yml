@@ -1,8 +1,10 @@
 name: Build Validation
 
 on:
-  pull_request_target:
-    types: [ready_for_review, synchronize, labeled, unlabeled]
+  workflow_run:
+    workflows: [Pull Request Labeler]
+    types:
+      - completed
 
 jobs:
   review_required:
