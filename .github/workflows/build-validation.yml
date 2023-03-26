@@ -14,7 +14,6 @@ jobs:
           labels: 'Needs Review'
 
   review_required:
-    needs: set_review
     runs-on: ubuntu-latest
     steps:
       - name: Wait # Delay checking of labels for 10 seconds
