@@ -90,7 +90,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Strict Build Failed! ❌',
+              body: 'Strict Build Failed! ❌ - Please checkout this PR locally to fix the issue before merging or see checks.',
             });
       - name: Auto merge pr
         if: ${{ success() }}
@@ -98,3 +98,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    failed_validation:
+      needs: validate
+      if: ${{ failure() }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: Remove Label
+          uses: actions-ecosystem/action-remove-labels@v1
+          with:
+            labels: Auto Merge
