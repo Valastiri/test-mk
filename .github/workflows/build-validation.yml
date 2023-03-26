@@ -5,7 +5,7 @@ on:
     types: [ready_for_review, synchronize, labeled, unlabeled]
 
 jobs:
-  set-review:
+  set_review:
     runs-on: ubuntu-latest
     steps:
       - name: Assign Label
@@ -14,7 +14,7 @@ jobs:
           labels: 'Needs Review'
 
   review_required:
-    needs: set-review
+    needs: set_review
     runs-on: ubuntu-latest
     steps:
       - name: Check for Auto Merge or Needs Review
@@ -54,7 +54,7 @@ jobs:
 
   validate:
     needs: review_required
-    if: ${{ success () && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
+    if: ${{ success() && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     runs-on: ubuntu-latest
     steps:
       - name: Get PR SHA
