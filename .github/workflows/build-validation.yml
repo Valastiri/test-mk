@@ -98,12 +98,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    failed_validation:
-      needs: validate
-      if: ${{ failure() }}
-      runs-on: ubuntu-latest
-      steps:
-        - name: Remove Label
-          uses: actions-ecosystem/action-remove-labels@v1
-          with:
-            labels: Auto Merge
+  failed_validation:
+    needs: validate
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove Label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: Auto Merge
