@@ -1,0 +1,57 @@
+name: Label Check
+
+on:
+  pull_request_target:
+    types: [opened, ready_for_review, synchronize, labeled, unlabeled]
+
+jobs:
+  set_review:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+    steps:
+      - name: Assign Label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: 'Needs Review'
+
+  review_required:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait # Delay checking of labels for 10 seconds
+        run: sleep 10s
+      - name: Label Checkout
+        uses: actions/checkout@v3
+      - name: Check for Auto Merge or Needs Review
+        id: check_labels
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') || contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+        run: |
+          if [ "$(echo ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }})" == "true" ]; then
+            echo "Both labels present"
+            # code to be executed if both 'Auto Merge' and 'Needs Review' labels are present
+            echo "RUN_REMOVE_LABEL=true" >> $GITHUB_ENV
+            echo "PREVENT_MERGE=false" >> $GITHUB_ENV
+          else
+            echo "Only one label is present"
+            # code to be executed if only one of the labels is present
+            echo "RUN_REMOVE_LABEL=false" >> $GITHUB_ENV
+            echo "PREVENT_MERGE=${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}" >> $GITHUB_ENV
+          fi
+
+      - name: Remove Label
+        if: ${{ env.RUN_REMOVE_LABEL == 'true' }}
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: Needs Review
+        id: remove-label
+
+      - name: Remove Label Failed
+        if: ${{ steps.remove-label.outcome == 'failure' }}
+        run: echo "Remove Label step failed" && exit 1
+
+      - name: Remove Label Succeeded
+        if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
+        run: echo "Remove Label step succeeded and returned code 0"
+
+      - name: Prevent Merge
+        if: ${{ env.RUN_REMOVE_LABEL == 'false' && env.PREVENT_MERGE == 'true' }}
+        run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
