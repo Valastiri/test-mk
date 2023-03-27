@@ -2,17 +2,9 @@ name: Build Validation
 
 on:
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, labeled, unlabeled]
+    types: [synchronize, labeled, unlabeled]
 
 jobs:
-  set_review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Assign Label
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: 'Needs Review'
-
   review_required:
     runs-on: ubuntu-latest
     steps:
