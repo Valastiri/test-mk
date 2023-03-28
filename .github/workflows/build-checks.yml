@@ -2,14 +2,14 @@ name: Build Checks
 
 on:
   workflow_run:
-    workflows: ["Label Check"]
+    workflows: [Label Check]
     types:
       - completed
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
+    if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Get PR SHA
         id: sha
