@@ -14,7 +14,7 @@ jobs:
         with:
           labels: 'Needs Review'
 
-  label:
+  verify-labels:
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -54,7 +54,7 @@ jobs:
 
   merge:
     needs: label
-    if: needs.label.outputs.status == 'success'
+    if: needs.verify-labels.outputs.status == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Get PR SHA
