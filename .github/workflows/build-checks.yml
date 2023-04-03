@@ -51,7 +51,6 @@ jobs:
         run: echo "Remove Label step succeeded and returned code 0"
 
       - name: Verify Label
-        id: check-labels
         uses: mheap/github-action-required-labels@v4
         with:
           mode: exactly
@@ -62,8 +61,8 @@ jobs:
 
   merge:
     needs: verify-labels
-    if: needs.verify-labels.outputs.status == 'success'
     runs-on: ubuntu-latest
+    if: needs.verify-labels.outputs.status == 'success'
     steps:
       - name: Get PR SHA
         id: sha
