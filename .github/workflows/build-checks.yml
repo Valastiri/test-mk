@@ -5,26 +5,36 @@ on:
     types: [opened, synchronize, labeled, unlabeled]
 
 jobs:
-  review_required:
+  set-review:
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
     steps:
+      - name: Assign Label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: 'Needs Review'
+
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    outputs:
+      status: ${{ steps.check-labels.outputs.status }}
+    steps:
+      - id: check-labels
+        uses: mheap/github-action-required-labels@v4
+        with:
+          mode: exactly
+          count: 1
+          labels: "Needs Review"
+          add_comment: true
+          message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
       - name: Wait # Delay checking of labels for 10 seconds
         run: sleep 10s
-      - name: Check for Auto Merge or Needs Review
-        id: check_labels
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') || contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
-        run: |
-          if [ "$(echo ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }})" == "true" ]; then
-            echo "Both labels present"
-            # code to be executed if both 'Auto Merge' and 'Needs Review' labels are present
-            echo "RUN_REMOVE_LABEL=true" >> $GITHUB_ENV
-            echo "PREVENT_MERGE=false" >> $GITHUB_ENV
-          else
-            echo "Only one label is present"
-            # code to be executed if only one of the labels is present
-            echo "RUN_REMOVE_LABEL=false" >> $GITHUB_ENV
-            echo "PREVENT_MERGE=${{ contains(github.event.pull_request.labels.*.name, 'Needs Review') }}" >> $GITHUB_ENV
-          fi
+      - name: Auto Merge and Needs Review Logic
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
+        run: echo "RUN_REMOVE_LABEL=true" >> $GITHUB_ENV
 
       - name: Remove Label
         if: ${{ env.RUN_REMOVE_LABEL == 'true' }}
@@ -41,13 +51,9 @@ jobs:
         if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
         run: echo "Remove Label step succeeded and returned code 0"
 
-      - name: Prevent Merge
-        if: ${{ env.RUN_REMOVE_LABEL == 'false' && env.PREVENT_MERGE == 'true' }}
-        run: echo "::error::Pull request cannot be merged when Needs Review label is assigned." && exit 1
-
-  validate:
-    needs: review_required
-    if: ${{ success() && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
+  merge:
+    needs: label
+    if: needs.label.outputs.status == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Get PR SHA
@@ -92,7 +98,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   failed_validation:
-    needs: validate
+    needs: merge
     if: ${{ failure() && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     runs-on: ubuntu-latest
     steps:
