@@ -22,10 +22,13 @@ jobs:
         uses: mheap/github-action-required-labels@v4
         with:
           mode: exactly
-          count: 0
+          count: 1
           labels: "Needs Review"
           add_comment: true
           message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
+          exit_type: failure
+      - run: echo "Review Required" && exit 1
+        if: needs.set-review.outputs.status == 'failure'
 
   verify-labels:
     needs: set-review
