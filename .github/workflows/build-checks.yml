@@ -53,7 +53,7 @@ jobs:
 
 
   merge:
-    needs: label
+    needs: verify-labels
     if: needs.verify-labels.outputs.status == 'success'
     runs-on: ubuntu-latest
     steps:
