@@ -22,16 +22,6 @@ jobs:
     outputs:
       status: ${{ steps.check-labels.outputs.status }}
     steps:
-      - id: check-labels
-        uses: mheap/github-action-required-labels@v4
-        with:
-          mode: exactly
-          count: 0
-          labels: "Needs Review"
-          add_comment: true
-          message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
-      - name: Wait # Delay checking of labels for 10 seconds
-        run: sleep 10s
       - name: Auto Merge and Needs Review Logic
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         run: echo "RUN_REMOVE_LABEL=true" >> $GITHUB_ENV
@@ -50,6 +40,17 @@ jobs:
       - name: Remove Label Succeeded
         if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
         run: echo "Remove Label step succeeded and returned code 0"
+
+      - name: Review Fail
+        id: check-labels
+        uses: mheap/github-action-required-labels@v4
+        with:
+          mode: exactly
+          count: 0
+          labels: "Needs Review"
+          add_comment: true
+          message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
+
 
   merge:
     needs: label
