@@ -17,23 +17,19 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: 'Needs Review'
-      - name: Review Fail
+      - name: Verify Label # Ensures that label is appropriately set for following steps
         id: check-labels
         uses: mheap/github-action-required-labels@v4
         with:
           mode: exactly
           count: 1
           labels: "Needs Review"
-          add_comment: true
-          message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
-          exit_type: failure
-      - run: echo "Review Required" && exit 1
-        if: needs.set-review.outputs.status == 'failure'
+          exit_type: success
 
   verify-labels:
     needs: set-review
     runs-on: ubuntu-latest
-    if: needs.label.outputs.status == 'failure'
+    if: needs.label.outputs.status == 'success'
     steps:
       - name: Auto Merge and Needs Review Logic
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
@@ -53,6 +49,16 @@ jobs:
       - name: Remove Label Succeeded
         if: ${{ steps.remove-label.outcome == 'success' && steps.remove-label.outputs.code == '0' }}
         run: echo "Remove Label step succeeded and returned code 0"
+
+      - name: Verify Label
+        id: check-labels
+        uses: mheap/github-action-required-labels@v4
+        with:
+          mode: exactly
+          count: 0
+          labels: "Needs Review"
+          add_comment: true
+          message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
 
   merge:
     needs: verify-labels
