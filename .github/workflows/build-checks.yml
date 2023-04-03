@@ -61,8 +61,8 @@ jobs:
 
   merge:
     needs: verify-labels
+    if: ${{ success() && contains(github.event.pull_request.labels.*.name, 'Auto Merge') }}
     runs-on: ubuntu-latest
-    if: needs.verify-labels.outputs.status == 'success'
     steps:
       - name: Get PR SHA
         id: sha
