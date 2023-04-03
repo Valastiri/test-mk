@@ -26,7 +26,7 @@ jobs:
         uses: mheap/github-action-required-labels@v4
         with:
           mode: exactly
-          count: 1
+          count: 0
           labels: "Needs Review"
           add_comment: true
           message: "This PR is being prevented from merging because it {{ provided }}. Maintainers can auto merge by applying the Auto Merge label."
@@ -106,3 +106,7 @@ jobs:
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Auto Merge
+      - name: Assign Label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: 'Needs Review'
