@@ -5,32 +5,17 @@ on:
     types: [opened, synchronize, labeled, unlabeled]
 
 jobs:
-  set-review:
+  verify-labels:
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
-    outputs:
-      status: ${{ steps.check-labels.outputs.status }}
     steps:
       - name: Assign Label
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: 'Needs Review'
-      - name: Verify Label # Ensures that label is appropriately set for following steps
-        id: check-labels
-        uses: mheap/github-action-required-labels@v4
-        with:
-          mode: exactly
-          count: 1
-          labels: "Needs Review"
-          exit_type: success
-
-  verify-labels:
-    needs: set-review
-    runs-on: ubuntu-latest
-    if: needs.set-review.outputs.status == 'success'
-    steps:
       - name: Auto Merge and Needs Review Logic
         if: ${{ contains(github.event.pull_request.labels.*.name, 'Auto Merge') && contains(github.event.pull_request.labels.*.name, 'Needs Review') }}
         run: echo "RUN_REMOVE_LABEL=true" >> $GITHUB_ENV
@@ -51,6 +36,7 @@ jobs:
         run: echo "Remove Label step succeeded and returned code 0"
 
       - name: Verify Label
+        id: check-labels
         uses: mheap/github-action-required-labels@v4
         with:
           mode: exactly
