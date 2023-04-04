@@ -6,7 +6,7 @@ theme:
   pallete:
     scheme: slate
   favicon: /assets/BNN-favicon.png
-   features:
+  features:
     - navigation.tabs
     - navigation.top
 
